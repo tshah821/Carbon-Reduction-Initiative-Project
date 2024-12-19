@@ -1,0 +1,224 @@
+
+---
+title: "Envrionmental Project ROI with Carbon Credits"
+subtitle: "Multiple Regression Appraoch"
+author: "Tirth Shah, William Kang, Davis Blanch, and Ria Saxena"
+date: today
+format: 
+  revealjs:
+    width: 1920
+    height: 1080
+    margin: 0.2
+    center: true
+echo: false
+warning: false
+transition: zoom
+---
+
+```{r}
+#loading libraries
+library(ggplot2)
+library(readr)
+library(dplyr)
+library(scales)
+library(knitr)
+library(kableExtra)
+library(broom)
+```
+
+## Research Question
+
+-   Selected Prompt #4 on Corporate CSR Initiatives
+
+    -   What has the greatest ROI: renewable energy, supply chain efficiency, or reforestation investment?
+
+-   Findings lead to efficient capital allocation and maximum impact
+
+## Data Overview
+
+-   Utilized Berkeley Public Policy school’s Voluntary Registry Offsets Database
+
+-   Carbon offset project database with variables scope and carbon credit issuance
+
+Regression Equations:
+
+```{=html}
+<style>
+.reveal pre code {
+    font-size: 0.9em; /* Adjust font size */
+}
+</style>
+```
+$$ 
+\text{Carbon Credits Issued} = \beta_0 + \beta_1 \cdot \text{Project Type} + \epsilon
+$$ $$ 
+\text{Carbon Credits Issued} = \beta_0 + \beta_1 \cdot \text{Renewable Energy} + \epsilon
+$$ $$ 
+\text{Carbon Credits Issued} = \beta_0 + \beta_1 \cdot \text{Supply Chain} + \epsilon
+$$
+
+$$   \begin{align}  
+ \text{Carbon Credits Issued} = \beta_0 + \beta_1 \cdot \text{Multicategorical Variable} + \epsilon
+\end{align}$$
+
+$$   \begin{align}  
+ \text{Carbon Credits Issued} = \beta_0 + \beta_1 \cdot \text{Renewable Energy} + \epsilon
+\end{align}$$
+
+$$   \begin{align}  
+ \text{Carbon Credits Issued} = \beta_0 + \beta_1 \cdot \text{Supply Chain} + \epsilon
+\end{align}$$
+
+## General Comparison
+
+```{r}
+general_df <- read.csv("data/general_comparison.csv")
+general_df$scope <- factor(general_df$scope, ordered = FALSE)
+general_df$scope <- relevel(general_df$scope, ref = "Renewables")
+```
+
+::: {.fragment .fade-out}
+```{r, fig.width=16, fig.height=8}
+general_model <- lm(credits_issued ~ scope, data = general_df)
+
+tidy_model <- broom::tidy(general_model) |>
+  rename(
+    Term = term,
+    Estimate = estimate,
+    "Std. Error" = std.error,
+    "t-Value" = statistic,
+    "p-Value" = p.value
+  )
+
+# Generate the table with larger font size
+kable(tidy_model, caption = "Regression Results") |>
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"), 
+    full_width = FALSE, 
+    font_size = 30 # Increase font size for better visibility
+  )
+```
+:::
+
+::: fragment
+```{r, fig.width=16, fig.height=8}
+general_comparison_plot <- ggplot(general_df, aes(x = scope, y = credits_issued)) +
+  geom_jitter(aes(color = credits_issued), width = 0.15, height = 0) +  
+  labs(
+    x = "Project Scope",
+    y = "Carbon Credits Issued (log scale)",
+    title = "Carbon Credits Issued per Project Type",
+    caption = "Source: Berkeley Carbon Trading Project"
+  ) +
+  scale_y_log10(labels = comma) +
+  scale_color_viridis_c(option = "turbo", begin = .1) +  
+  scale_x_discrete(expand = expansion(add = 0.9)) +
+  theme_classic(base_size = 12)+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),legend.position = "none")
+general_comparison_plot
+```
+:::
+
+## Renewable Comparison
+
+```{r}
+renewables_df <- read.csv("data/renewable_comparison.csv")
+renewables_df$type <- factor(renewables_df$type, ordered = FALSE)
+renewables_df$type <- relevel(renewables_df$type, ref = "Solar")
+```
+
+::: {.fragment .fade-out}
+```{r, fig.width=16, fig.height=8}
+renewables_model <- lm(credits_issued ~ type, data = renewables_df)
+
+tidy_renew <- broom::tidy(renewables_model) |>
+  rename(
+    Term = term,
+    Estimate = estimate,
+    "Std. Error" = std.error,
+    "t-Value" = statistic,
+    "p-Value" = p.value
+  )
+
+# Generate the table with larger font size
+kable(tidy_renew, caption = "Regression Results") |>
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"), 
+    full_width = FALSE, 
+    font_size = 30  # Increase font size for better visibility
+  )
+```
+:::
+
+::: fragment
+```{r, fig.width=16, fig.height=8}
+renewable_plot <- ggplot(renewables_df, aes(x = type, y = credits_issued))+
+  geom_jitter(aes(color = credits_issued), width = .15, height = 0)+
+  labs(
+    x = "Renewable Energy Type",
+    y = "Carbon Credits Issued (log scale)",
+    title = "Carbon Credits Issued per Renewable Energy Source",
+    caption = "Source: Berkeley Carbon Trading Project"
+  ) +
+  scale_y_log10(labels = comma) +
+  scale_color_viridis_c(option = "turbo", begin = .1) +  
+  scale_x_discrete(expand = expansion(add = 0.9)) +
+  theme_classic(base_size = 12)+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),legend.position = "none")
+  
+  
+renewable_plot
+```
+:::
+
+## Supply Chain Comparison
+
+```{r}
+supply_chain_df <- read.csv("data/supply_chain_comparison.csv")
+supply_chain_df$scope <- factor(supply_chain_df$scope, ordered = FALSE)
+supply_chain_df$scope <- relevel(supply_chain_df$scope, ref = "Chemical Processes")
+```
+
+::: {.fragment .fade-out}
+```{r, fig.width=16, fig.height=8}
+supply_chain_model <- lm(credits_issued ~ scope, data = supply_chain_df)
+
+tidy_supply_chain <- broom::tidy(supply_chain_model) |>
+  rename(
+    Term = term,
+    Estimate = estimate,
+    "Std. Error" = std.error,
+    "t-Value" = statistic,
+    "p-Value" = p.value
+  )
+
+# Generate the table with larger font size
+kable(tidy_supply_chain, caption = "Regression Results") |>
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"), 
+    full_width = FALSE, 
+    font_size = 30  # Increase font size for better visibility
+  )
+```
+:::
+
+::: fragment
+```{r, fig.width=16, fig.height=8}
+supplychain_plot <- ggplot(supply_chain_df, aes(x = scope, y = credits_issued))+
+  geom_jitter(aes(color = credits_issued), with = .03, height = 0)+
+  labs(
+    x = "Supply Chains",
+    y = "Carbon Credits Issued (log scale)",
+    title = "Carbon Credits Issued per Supply Chain",
+    caption = "Source: Berkeley Carbon Trading Project")+
+  scale_y_log10(labels = comma)+
+  scale_color_viridis_c(option = "turbo", begin = .1)+  
+  scale_x_discrete(expand = expansion(add = 0.9)) +
+  theme_classic(base_size = 12)+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),legend.position = "none")
+
+supplychain_plot
+```
+:::
+
+# Findings and Implications

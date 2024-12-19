@@ -1,0 +1,4 @@
+"0","general_df <- read.csv(""data/general_comparison.csv"")"
+"0","general_df$scope <- factor(general_df$scope, ordered = FALSE)"
+"0","general_df$scope <- relevel(general_df$scope, ref = ""Renewables"")"
+"0","general_model <- lm(credits_issued ~ scope, data = general_df)"

@@ -1,0 +1,275 @@
+---
+title: "Carbon Reduction Initiative Project"
+subtitle: "Determining the Best ROI for Companies"
+author: "Tirth Shah, William Kang, Davis Blanch, and Ria Saxena"
+date: 12/04/2024
+format: 
+  revealjs:
+    width: 1920
+    height: 1080
+    min-scale: .6
+    theme: serif
+echo: false
+warning: false
+transition: zoom
+---
+
+```{r}
+#loading libraries
+library(ggplot2)
+library(readr)
+library(dplyr)
+library(scales)
+library(knitr)
+library(kableExtra)
+library(broom)
+```
+
+```{r}
+serif_background_color <- "#f0f1eb"
+```
+
+
+## Research Question
+
+**Prompt:**
+Determine whether investing into renewable energy, improving supply chain efficiency, or partnering with NGOs for reforestation projects offers the best ROI based on environmental and economic data <br><br>
+
+
+We ran 3 linear regression models comparing:
+
+1. Renewable energy, reforestation, and supply chain efficiency
+
+2. The different types of renewable energy
+
+3. Which types of supply chain to focus on
+
+
+## Data Overview
+
+Utilized Berkeley Public Policy school's Voluntary Registry Offsets Database
+
+
+**Variables:**
+
+* Project Name
+
+* Project Scope
+
+* Project Type
+
+* Carbon Credits Issued
+
+Regression Equations:
+
+$$
+  \text{Carbon Credits Issued} = \beta_0 + \beta_1 \cdot \text{Project Scope} + \epsilon
+$$
+$$
+  \text{Carbon Credits Issued} = \beta_0 + \beta_1 \cdot \text{Renewable Energy} + \epsilon
+$$ 
+
+$$
+  \text{Carbon Credits Issued} = \beta_0 + \beta_1 \cdot \text{Supply Chain} + \epsilon
+$$ 
+
+## General Comparison
+
+```{r}
+general_df <- read.csv("data/general_comparison.csv")
+general_df$scope <- factor(general_df$scope, ordered = FALSE)
+general_df$scope <- relevel(general_df$scope, ref = "Renewables")
+```
+
+::: {style="height: 25vh"}
+```{r, fig.width=16, fig.height=8}
+general_model <- lm(credits_issued ~ scope, data = general_df)
+
+tidy_model <- broom::tidy(general_model) |>
+  rename(
+    Term = term,
+    Estimate = estimate,
+    "Std. Error" = std.error,
+    "t-Value" = statistic,
+    "p-Value" = p.value
+  )
+
+# Generate the table with larger font size
+kable(tidy_model, caption = "Regression Results") |>
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"), 
+    full_width = FALSE, 
+    position = "float_right",
+    font_size = 25) # Increase font size for better visibility
+  
+```
+:::
+
+::: {style="height: 75vh"}
+```{r, fig.width=12, fig.height=8}
+general_comparison_plot <- ggplot(general_df, aes(x = scope, y = credits_issued)) +
+  geom_jitter(aes(color = credits_issued), width = 0.15, height = 0) +  
+  labs(
+    x = "Project Scope",
+    y = "Carbon Credits Issued (log scale)",
+    title = "Carbon Credits Issued per Project Type",
+    caption = "Source: Berkeley Carbon Trading Project"
+  ) +
+  scale_y_log10(labels = comma) +
+  scale_color_viridis_c(option = "turbo", begin = .1) +  
+  scale_x_discrete(expand = expansion(add = 0.9)) +
+  theme_classic(base_size = 12)+
+   theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "none",
+        plot.title = element_text(face = "bold", size = 16),
+        plot.subtitle = element_text(face = "bold", size = 14),
+        axis.title.x = element_text(face = "bold", size = 14),
+        axis.title.y = element_text(face = "bold", size = 14),
+        axis.text = element_text(face = "bold", size = 14),
+        plot.caption = element_text(face = "bold", size = 12),
+        plot.background = element_rect(fill  = serif_background_color, color = NA),
+        panel.background = element_rect(fill = serif_background_color, color = NA))
+  
+general_comparison_plot
+```
+:::
+
+## Renewable Comparison
+
+```{r}
+renewables_df <- read.csv("data/renewable_comparison.csv")
+renewables_df$type <- factor(renewables_df$type, ordered = FALSE)
+renewables_df$type <- relevel(renewables_df$type, ref = "Solar")
+```
+
+::: {style="height: 25vh"}
+```{r, fig.width=16, fig.height=8}
+renewables_model <- lm(credits_issued ~ type, data = renewables_df)
+
+tidy_renew <- broom::tidy(renewables_model) |>
+  rename(
+    Term = term,
+    Estimate = estimate,
+    "Std. Error" = std.error,
+    "t-Value" = statistic,
+    "p-Value" = p.value
+  )
+
+# Generate the table with larger font size
+kable(tidy_renew, caption = "Regression Results") |>
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"), 
+    full_width = FALSE, 
+    position = "float_right",
+    font_size = 22.5  # Increase font size for better visibility
+  )
+```
+:::
+
+::: {style="height: 75vh"}
+```{r, fig.width=12, fig.height=8}
+renewable_plot <- ggplot(renewables_df, aes(x = type, y = credits_issued))+
+  geom_jitter(aes(color = credits_issued), width = .15, height = 0)+
+  labs(
+    x = "Renewable Energy Type",
+    y = "Carbon Credits Issued (log scale)",
+    title = "Carbon Credits Issued per Renewable Energy Source",
+    caption = "Source: Berkeley Carbon Trading Project"
+  ) +
+  scale_y_log10(labels = comma) +
+  scale_color_viridis_c(option = "turbo", begin = .1) +  
+  scale_x_discrete(expand = expansion(add = 0.9)) +
+  theme_classic(base_size = 12)+
+ theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "none",
+        plot.title = element_text(face = "bold", size = 16),
+        plot.subtitle = element_text(face = "bold", size = 14),
+        axis.title.x = element_text(face = "bold", size = 14),
+        axis.title.y = element_text(face = "bold", size = 14),
+        axis.text = element_text(face = "bold", size = 14),
+        plot.caption = element_text(face = "bold", size = 12),
+        plot.background = element_rect(fill  = serif_background_color, color = NA),
+        panel.background = element_rect(fill = serif_background_color, color = NA))
+  
+  
+renewable_plot
+```
+:::
+
+## Supply Chain Comparison
+
+```{r}
+supply_chain_df <- read.csv("data/supply_chain_comparison.csv")
+supply_chain_df$scope <- factor(supply_chain_df$scope, ordered = FALSE)
+supply_chain_df$scope <- relevel(supply_chain_df$scope, ref = "Chemical Processes")
+```
+
+::: {style="height: 25vh"}
+```{r, fig.width=12, fig.height=8}
+supply_chain_model <- lm(credits_issued ~ scope, data = supply_chain_df)
+
+tidy_supply_chain <- broom::tidy(supply_chain_model) |>
+  rename(
+    Term = term,
+    Estimate = estimate,
+    "Std. Error" = std.error,
+    "t-Value" = statistic,
+    "p-Value" = p.value
+  )
+
+# Generate the table with larger font size
+kable(tidy_supply_chain, caption = "Regression Results") |>
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"), 
+    full_width = FALSE, 
+    position = "float_right",
+    font_size = 21.5
+  )
+```
+:::
+
+::: {style="height: 75vh"}
+```{r, fig.width=12, fig.height=8}
+supplychain_plot <- ggplot(supply_chain_df, aes(x = scope, y = credits_issued))+
+  geom_jitter(aes(color = credits_issued), with = .03, height = 0)+
+  labs(
+    x = "Supply Chains",
+    y = "Carbon Credits Issued (log scale)",
+    title = "Carbon Credits Issued per Supply Chain",
+    caption = "Source: Berkeley Carbon Trading Project")+
+  scale_y_log10(labels = comma)+
+  scale_color_viridis_c(option = "turbo", begin = .1)+  
+  scale_x_discrete(expand = expansion(add = 0.9)) +
+  theme_classic(base_size = 12)+
+ theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "none",
+        plot.title = element_text(face = "bold", size = 16),
+        plot.subtitle = element_text(face = "bold", size = 14),
+        axis.title.x = element_text(face = "bold", size = 14),
+        axis.title.y = element_text(face = "bold", size = 14),
+        axis.text = element_text(face = "bold", size = 14),
+        plot.caption = element_text(face = "bold", size = 12),
+        plot.background = element_rect(fill  = serif_background_color, color = NA),
+        panel.background = element_rect(fill = serif_background_color, color = NA))
+  
+supplychain_plot
+```
+:::
+
+## Findings and Implications
+
+
+### Key Takeaways
+
+ - Reforestation projects generate the most carbon credits out of the 3 options (almost 1.1m)
+ 
+- Most renewable energy investments yield similar amounts of carbon credits except for biomass projects
+
+- Carbon capture/storage has high potential, underscored by low statistical power <br><br>
+
+
+### Policy Proposals
+
+- CSR initiatives aimed at reducing CO2 emissions should focus on reforestation
+
+- Improving industrial/manufacturing efficiency is recommended to companies aiming to reduce their carbon emissions

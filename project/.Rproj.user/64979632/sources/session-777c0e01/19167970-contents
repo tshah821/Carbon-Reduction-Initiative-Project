@@ -1,0 +1,400 @@
+---
+title: "Carbon Reduction Policy Initiative"
+format: html
+editor: visual
+author: "Tirth Shah, William Kang, Davis Blanch, and Ria Saxena"
+date: 12/16/2024
+echo: false
+warning: false
+theme: "yeti"
+---
+
+```{r}
+# Important Note: Confidence interval plots in this documents are used to show the *actual* estimate of carbon credits issued
+# This is because it is easier to understand than have everything be in reference to a certain variable
+```
+
+
+```{r}
+library(ggplot2)
+library(readr)
+library(dplyr)
+library(scales)
+library(modelsummary)
+library(broom)
+```
+
+# Introduction
+  The goal of this project was to help a company choose which Corporate Social Responsibility (CSR) initiative they should be focus on to reduce carbon emissions. Doing so we examined three different types of green investment avenues and analyze the most effective strategy for increasing return on investment. The three possible avenues were investing in renewable energy, improving supply chain efficiency, or partnering with NGOs for reforestation projects.
+
+  The history and background of CSR can be traced back to the 1950s, with economist Howard Bowen first bringing attention to the subject through his written work “Social Responsibilities of the Businessman”.[^1] Since then, CSR has expanded vastly, particularly at the start of the 2000s, with the term Environmental, Social, and Governmental (ESG) having been coined in 2005. The aftermath of events such as the Deepwater Horizon Oil Spill and 2008 Financial Crisis brought a greater public awareness to the importance of CSR, and now multi-million dollar companies like Wells Fargo, Coca-Cola, Walt Disney, and Pfizer have incorporated it into their business strategies. CSR benefits corporations in two major ways; first, they have been shown to improve financial performance. A meta-analysis from Clausius Scientific Press found that CSR has a positive effect on financial performance, with a Babson College research study finding that companies investing in a social purpose have a 6% higher market value and generate 20% more revenue than those that don’t.[^2] Additionally, CSR benefits companies by increasing customer loyalty and engagement, with studies conducted by Cone Communications finding customers are more likely to both buy a product and pay more for it if a company advocated for an ESG issue.[^3] As such, this project is relevant because given the vast landscape of green projects available, it helps narrow down the projects that a company can invest the least capital into for the greatest gain. Ultimately firms have limited capital to spend on CSR initiatives as that is capital not given directly to shareholders, so it is important to assess how they can most effectively deploy their resources for the greatest return.
+
+[^1]: Mauricio Andrés Latapí Agudelo, Lára Jóhannsdóttir, and Brynhildur Davídsdóttir, “A Literature Review of the History and Evolution of Corporate Social Responsibility,” International Journal of Corporate Social Responsibility 4, no. 1 (January 22, 2019): 1–23, https://doi.org/10.1186/s40991-018-0039-y.
+[^2]: Steve Rochlin et al., “Project ROI: Defining the Competitive and Financial Advantages of Corporate Responsibility and Sustainability,” Babson College Institute for Social Innovation, 2015, https://www.babson.edu/media/babson/site-assets/content-assets/academics/centers-and-institutes/the-lewis-institute/project-roi/Project-ROI-Report.pdf.
+[^3]: Cone Communications, “2017 Cone Communications CSR Study,” 2017, https://www.cbd.int/doc/case-studies/inc/cs-inc-cone-communications-en.pdf.
+
+# Data and Methodology
+
+  To determine whether investing into renewable energy, improving supply chain efficiency, or partnering with NGOs to improve reforestation provides the best return on investment; we must find a way to measure both the environmental and financial of each sector. To do this, our team decided to look into the Berkeley Carbon Trading Project, which is a database that contains all carbon offset projects.[^4] From this database, we extracted the necessary information such as project name, project scope, project type, and carbon credits issued.
+
+  The main things to focus on are project scope, project type, and carbon credits issued. The project scope has 9 different categories (1 renewable, 1 forestry, and 7 supply chain) that refer to the focus of the project. The project type is simply a more specific focus within the broader groups of the project scope. Finally, the carbon credits issued refer to the number of carbon credits given to the project. The reason we use carbon credits as a means to determine the success of projects is because they act as both an environmental and financial indicator. A single carbon credit is issued when a metric ton of CO2 is reduced or removed from the atmosphere.[^5] Furthermore, these credits can be bought or sold to offset carbon emissions. Therefore, investing into an initiative that yields more carbon credits can be sold for more profit or offset more production/emissions.
+
+[^4]: Center for Environmental Public Policy (CEPP), “Berkeley Carbon Trading Project,” gspp.berkeley.edu (University of California, Berkeley, 2024), https://gspp.berkeley.edu/research-and-impact/centers/cepp/projects/berkeley-carbon-trading-project.
+[^5]: “Carbon Credits Explained.” Climate Impact Partners. Accessed December 15, 2024. https://www.climateimpact.com/services-projects/carbon-credits-explained-what-they-are-and-how-they-work/#:~:text=Carbon%20credits%20are%20generated%20by,2e)%20in%20the%20atmosphere. 
+
+# Analysis and Results
+
+## Primary Comparisons
+
+  Figure 1 below shows the distribution of carbon credits issued per project scope (whether it focuses on renewables, reforestation, or supply chain). Figure 2 shows the 95% confidence intervals for the estimated carbon credits issued per project scope. Simply put, each interval represents a range of values the true number of carbon credits issued could be.
+
+```{r}
+general_df <- read.csv("data/general_comparison.csv")
+general_df$scope <- factor(general_df$scope, ordered = FALSE)
+general_df$scope <- relevel(general_df$scope, ref = "Renewables")
+general_model <- lm(credits_issued ~ scope, data = general_df)
+```
+
+
+```{r}
+general_comparison_plot <- ggplot(general_df, aes(x = scope, y = credits_issued)) +
+  geom_jitter(aes(color = credits_issued), width = 0.15, height = 0.3) +  
+  labs(
+    x = "Project Scope",
+    y = "Carbon Credits Issued (log scale)",
+    title = "Figure 1",
+    caption = "Source: Berkeley Carbon Trading Project"
+  ) +
+  scale_y_log10(labels = comma) +
+  scale_color_viridis_c(option = "turbo", begin = .1) +  
+  scale_x_discrete(expand = expansion(add = 0.9)) +
+  theme_classic(base_size = 12)+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),legend.position = "none")
+general_comparison_plot
+```
+
+
+```{r}
+
+intercept1 <- tidy(general_model, conf.int = TRUE) |>
+  filter(term == "(Intercept)")|>
+  mutate(
+    term = "Intercept", 
+    adjusted_estimate = estimate,
+    adjusted_lower = conf.low,
+    adjusted_upper = conf.high
+  )
+
+
+coefficients1 <- tidy(general_model, conf.int = TRUE) |>
+  filter(term != "(Intercept)") |>
+  mutate(
+    adjusted_estimate = estimate + intercept1$estimate,  
+    adjusted_lower = conf.low + intercept1$estimate,     
+    adjusted_upper = conf.high + intercept1$estimate     
+  )
+
+plot_data1 <- bind_rows(coefficients1, intercept1)
+
+
+ggplot(plot_data1, aes(x = adjusted_estimate, y = term)) +
+  geom_point(color = "blue") +
+  geom_errorbarh(aes(xmin = adjusted_lower, xmax = adjusted_upper), height = 0.2, color = "blue") +
+  geom_vline(xintercept = 0, color = "red", linetype = "dashed", linewidth = 0.75) +
+  scale_x_continuous(labels = comma) +
+  scale_y_discrete(labels = c("Renewables", "Reforestation", "Supply Chain")) +
+  labs(
+    title = "Figure 2",
+    x = "Carbon Credits Issued",
+    y = " ",
+    caption = "Source: Berkeley Carbon Trading Project"
+  ) +
+  theme_minimal(base_size = 12)
+```
+
+From this data, we can gather that:
+
+ - renewable energy development nets ~ 460,000 carbon credits
+ - reforestation initiatives nets ~ 1.1 million carbon credits
+ - optimizing supply chain efficiency nets ~ 235,000 carbon credits
+
+
+## Renewable Energy Comparisons
+
+  Now Looking into our secondary projects, we want to compare what kind of renewable energy the company should invest into to optimize carbon credit generation.
+
+```{r}
+renewables_df <- read.csv("data/renewable_comparison.csv")
+renewables_df$type <- factor(renewables_df$type, ordered = FALSE)
+renewables_df$type <- relevel(renewables_df$type, ref = "Solar")
+renewables_model <- lm(credits_issued ~ type, data = renewables_df)
+```
+
+```{r}
+renewable_plot <- ggplot(renewables_df, aes(x = type, y = credits_issued))+
+  geom_jitter(aes(color = credits_issued), width = .15, height = 0.3)+
+  labs(
+    x = "Renewable Energy Source",
+    y = "Carbon Credits Issued (log scale)",
+    title = "Figure 3",
+    caption = "Source: Berkeley Carbon Trading Project"
+  ) +
+  scale_y_log10(labels = comma) +
+  scale_color_viridis_c(option = "turbo", begin = .1) +  
+  scale_x_discrete(expand = expansion(add = 0.9)) +
+  theme_classic(base_size = 12)+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),legend.position = "none")
+  
+  
+renewable_plot
+```
+
+```{r}
+intercept2 <- tidy(renewables_model, conf.int = TRUE) |>
+  filter(term == "(Intercept)")|>
+  mutate(
+    term = "Intercept", 
+    adjusted_estimate = estimate,
+    adjusted_lower = conf.low,
+    adjusted_upper = conf.high
+  )
+
+
+coefficients2 <- tidy(renewables_model, conf.int = TRUE) |>
+  filter(term != "(Intercept)") |>
+  mutate(
+    adjusted_estimate = estimate + intercept2$estimate,  
+    adjusted_lower = conf.low + intercept2$estimate,     
+    adjusted_upper = conf.high + intercept2$estimate     
+  )
+
+plot_data2 <- bind_rows(coefficients2, intercept2)
+
+
+ggplot(plot_data2, aes(x = adjusted_estimate, y = term)) +
+  geom_point(color = "blue") +
+  geom_errorbarh(aes(xmin = adjusted_lower, xmax = adjusted_upper), height = 0.2, color = "blue") +
+  geom_vline(xintercept = 0, color = "red", linetype = "dashed", linewidth = 0.75) +
+  scale_x_continuous(labels = comma) +
+  scale_y_discrete(labels = c("Solar", "Biomass", "Geothermal","Hydropower","Wind")) +
+  labs(
+    title = "Figure 4",
+    x = "Carbon Credits Issued",
+    y = " ",
+    caption = "Source: Berkeley Carbon Trading Project"
+  ) +
+  theme_minimal(base_size = 12)
+```
+
+The model predicts that:
+
+ - solar projects nets ~ 485,000 credits
+ - biomass nets ~ 200,000 credits
+ - geothermal nets ~ 660,000 credits
+ - hydropower nets ~ 680,000 credits
+ - wind nets ~ 410,000 credits
+
+
+## Supply Chain Comparisons
+Here is the list of supply chains and a brief description:
+
+ - **Chemical Processes:** reducing gasses from chemical/fuel manufacturing
+ - **Agriculture:** reducing emissions from crops, pastureland, and dairies
+ - **Carbon Capture:** capturing and permanent storage of CO2 from manufactured products
+ - **Community:** improving infrastructure via energy efficient technologies in residential and non-industrial buildings
+ - **Industrial/Commercial:** optimizing manufacturing processing
+ - **Transportation:** transportation related initiatives such as mass transit implementation, route/vehicle upgrades, fleet efficiency improvements
+ - **Waste Management:** reducing/removing emissions from waste management processes
+ 
+```{r}
+supply_chain_df <- read.csv("data/supply_chain_comparison.csv")
+supply_chain_df$scope <- factor(supply_chain_df$scope, ordered = FALSE)
+supply_chain_df$scope <- relevel(supply_chain_df$scope, ref = "Chemical Processes")
+supply_chain_model <- lm(credits_issued ~ scope, data = supply_chain_df)
+```
+ 
+```{r}
+supplychain_plot <- ggplot(supply_chain_df, aes(x = scope, y = credits_issued))+
+  geom_jitter(aes(color = credits_issued), with = .03, height = 0)+
+  labs(
+    x = "Supply Chains",
+    y = "Carbon Credits Issued (log scale)",
+    title = "Figure 5",
+    caption = "Source: Berkeley Carbon Trading Project")+
+  scale_y_log10(labels = comma)+
+  scale_color_viridis_c(option = "turbo", begin = .1)+  
+  scale_x_discrete(expand = expansion(add = 0.9)) +
+  theme_classic(base_size = 12)+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),legend.position = "none")
+
+supplychain_plot
+```
+
+
+```{r}
+intercept3 <- tidy(supply_chain_model, conf.int = TRUE) |>
+  filter(term == "(Intercept)")|>
+  mutate(
+    term = "Intercept", 
+    adjusted_estimate = estimate,
+    adjusted_lower = conf.low,
+    adjusted_upper = conf.high
+  )
+
+
+coefficients3 <- tidy(supply_chain_model, conf.int = TRUE) |>
+  filter(term != "(Intercept)") |>
+  mutate(
+    adjusted_estimate = estimate + intercept3$estimate,  
+    adjusted_lower = conf.low + intercept3$estimate,     
+    adjusted_upper = conf.high + intercept3$estimate     
+  )
+
+plot_data3 <- bind_rows(coefficients3, intercept3)
+
+
+ggplot(plot_data3, aes(x = adjusted_estimate, y = term)) +
+  geom_point(color = "blue") +
+  geom_errorbarh(aes(xmin = adjusted_lower, xmax = adjusted_upper), height = 0.2, color = "blue") +
+  geom_vline(xintercept = 0, color = "red", linetype = "dashed", linewidth = 0.75) +
+  scale_x_continuous(labels = comma) +
+  scale_y_discrete(labels = c("Chemical Processes", "Agriculture", "Carbon Capture","Community", "Industrial/Commercial", "Transportation", "Waste Management")) +
+  labs(
+    title = "Figure 6",
+    x = "Carbon Credits Issued",
+    y = " ",
+    caption = "Source: Berkeley Carbon Trading Project"
+  ) +
+  theme_minimal(base_size = 12)
+```
+
+Here the model predicts that:
+
+ - Chemical Processes nets ~ 310,000 credits
+ - Agriculture nets ~ 345,000 credits
+ - Carbon Capture nets ~ 3.6 million credits
+ - Community nets ~ 150,000 credits
+ - Industrial/Commercial nets ~ 540,000 credits
+ - Transportation nets ~ 29,000 credits
+ - Waste Management nets ~ 345,000 credits
+ 
+# Discussion
+
+### Renewables vs Reforestation vs Supply Chain Optimization
+
+As mentioned earlier, from the data we can interpret that projects focusing on reforestation efforts reduces/removes significantly more carbon dioxide from the atmosphere(as carbon credits are representative of emission reductions) compared to developing renewable energies or optimizing supply chains. Furthermore from this regression output below, we can see that all the coefficients are statistically significant, meaning that assuming there is no difference in carbon credits issued per project scope, the probability of getting coefficients like this or more extreme are very small.
+
+*Note estimate refers to the relationship to the reference category, while adjusted_estimate is the actual number of credits*
+
+```{r}
+plot_data1 <- plot_data1 |>
+  select(term,estimate,adjusted_estimate,p.value) |>
+  mutate(
+    term = case_when(
+      term == "Intercept" ~ "Renewables",
+      term == "scopeReforestation" ~ "Reforestation",
+      term == "scopeSupply Chain" ~ "Supply Chain"
+    )
+  ) |>
+  rename(
+    "Term" = term,
+    "Estimate" = estimate,
+    "Adjusted Estimate" = adjusted_estimate,
+    "P-Value" = p.value
+  )
+
+plot_data1
+```
+
+### Comparing Renewable Energy Sources
+
+Here is a simplified regression output for comparing renewables:
+
+```{r}
+plot_data2 <- plot_data2 |>
+  select(term,estimate,adjusted_estimate,p.value) |>
+  mutate(
+    term = case_when(
+      term == "Intercept" ~ "Solar",
+      term == "typeBiomass" ~ "Biomass",
+      term == "typeGeothermal" ~ "Geothermal",
+      term == "typeHydropower" ~ "Hydropower",
+      term == "typeWind" ~ "Wind",
+    )
+  ) |>
+  rename(
+    "Term" = term,
+    "Estimate" = estimate,
+    "Adjusted Estimate" = adjusted_estimate,
+    "P-Value" = p.value
+  )
+
+plot_data2
+```
+
+One important note is that there is significant overlap between confidence intervals. Simply put, it means that there is a high probability that the amount of carbon credits issued is the same among renewable energy sources. From the regression output, the only statistically significant estimates are for solar(the reference) and biomass. This means that solar, wind, hydropower, and geothermal will generate similar amounts of carbon credits, while biomass projects generate statistically lower amounts of carbon credits.
+
+Furthermore, looking at Figure 3, we can see that there are very few geothermal projects compared to the rest. This explains the increased range for the confidence interval, as there is not a lot of data to give us solid evidence for the true number of carbon credits issued for geothermal projects.
+
+
+### Comparing Different Supply Chains
+Here is the regression output for different supply chains:
+```{r}
+plot_data3 <- plot_data3|>
+  select(term,estimate,adjusted_estimate,p.value) |>
+  mutate(
+    term = case_when(
+      term == "Intercept" ~ "Chemical Processes",
+      term == "scopeAgriculture" ~ "Agriculture",
+      term == "scopeCarbon Capture" ~ "Carbon Capture",
+      term == "scopeCommunity" ~ "Community",
+      term == "scopeIndustrial/Commercial" ~ "Industrial/Commercial",
+      term == "scopeTransportation" ~ "Transportation",
+      term == "scopeWaste Management" ~ "Waste Management",)
+  ) |>
+  rename(
+    "Term" = term,
+    "Estimate" = estimate,
+    "Adjusted Estimate" = adjusted_estimate,
+    "P-Value" = p.value
+  )
+
+plot_data3
+```
+From this output, we can see that all estimates are statistically significant, meaning that we can assume that they generate different amounts of carbon credits compared to chemical processes(the reference variable). We see that carbon capture supply chains reduce the most amount of CO2 from the atmosphere, however if we look at Figure 5 we can see that there are only 6 sample points giving us a low statistical power. This means that even though it is statistically significant, there is still not enough evidence to say that Carbon Capture generates the most. Therefore, we should look towards Industrial/Commercial as the data shows that it would generate roughly 540,000 carbon credits.
+
+
+# Policy Implications
+
+From the data, our team recommends a diversified investment. Rather than simply investing all of the budget into a single avenue for carbon emissions, investing into multiple sectors will reduce risk of harm. If one investment fails to return a beneficial ROI, at least others might be yielding better returns, thus maintaining a net positive outcome. [^6]
+
+
+**Prioritize Reforestation Efforts:**
+
+ - Allocate a significant portion of the CSR budget to reforestation projects because they yield the highest return in carbon credits.
+ - Consider partnerships with established organizations in reforestation to ensure credible, scalable, and certified carbon offset programs.
+ 
+**Combine with High Impact Secondary Projects:**
+
+ - Use a portion of the budget to invest in renewable energy projects to diversify efforts while supporting innovation and energy transition goals.
+ - Limit investments in supply chain optimization to initiatives with strong co-benefits, such as cost savings or improved efficiency.
+ 
+**Equal Funding Among Solar, Hydropower, and Wind Renewable Energies:**
+
+ - Aside from biomass sourced renewable energy, all renewable energy endeavors generate similar amounts of carbon credits
+ - There is not enough evidence to make a sound conclusion on the impacts of geothermal energy as there are not enough data points (looking at Figure 3)
+ 
+**Prioritizing Optimization of Industrial/Commercial Processes:**
+
+ - Industrial/Commercial supply chains net the highest carbon credits, aside from carbon capture which does not have enough evidence to support.
+ - This could include endeavors such as: reducing energy consumption in manufacturing, switching to lower GHG-intensity fuels, or identifying and repairing natural gas/refinery gas leaks.
+ 
+[^6]: Henry Yoshida, CFP. “Council Post: Understanding the Importance of Investment Diversification.” Forbes, August 13, 2024. https://www.forbes.com/councils/forbesfinancecouncil/2022/09/23/understanding-the-importance-of-investment-diversification/. 
+
+# Conclusion
+
+As mentioned earlier, our research question was whether investing in renewable energy, improving supply chain efficiency, or partnering with NGOs for reforestation projects would net the best ROI for a company interested in committing to a CSR initiative. From the data we can conclusively determine that it would provide the best net yield returns to focus more on reforestation efforts as that has been proven to reduce/remove the most amounts of CO2 emissions via carbon credit issuances. Furthermore, we looked into the differences among renewable energies and supply chains and found that investing into solar, wind, and hydropower renewable energies as well as optimizing industrial/commercial processes will provide the greatest reduction/removal of CO2 from the atomosphere.
+
+
+
+ 

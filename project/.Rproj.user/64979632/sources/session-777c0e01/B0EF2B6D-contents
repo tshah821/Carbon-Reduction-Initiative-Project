@@ -1,0 +1,162 @@
+---
+title: "Project Data Wrangling"
+format: html
+editor: visual
+author: "Tirth Shah, William Kang, Davis Blanch, Ria Saxena"
+---
+
+# Converting to CSV
+First step in our project is to convert the .xslx file into a .csv file
+```{r}
+#| echo: true
+#| eval: false
+library(readxl)
+
+data <- read_excel("data/Voluntary-Registry-Offsets-Database--v2024-08-31.xlsx",sheet = "PROJECTS")
+
+output_path <- file.path("data","project_data.csv")
+write.csv(data, output_path, row.names = FALSE)
+```
+
+# Data Wrangling
+
+Since 3 regressions are to be performed on this dataset, the dataset has to be grouped by and aggregated 3 times. 
+
+## Setting up a Base Dataframe
+
+Before doing any of the three specific data wrangles for the regressions,We will set up a base dataframe(project_df) for an easy reference.
+
+
+```{r}
+#| warning: false
+
+#load in libraries
+library(tidyverse)
+library(dplyr)
+```
+
+```{r}
+
+project_data <- read.csv("data/project_data.csv")
+
+```
+
+
+```{r}
+#Setting up base dataframe for all 3 group by and aggregations
+project_df <- project_data |>
+  select(
+    project_name = ...2,
+    scope = ...6,
+    type = ...7,
+    credits_issued = ...16
+  ) |>
+  slice(-(1:3))|>
+  drop_na()
+
+glimpse(project_df)
+
+```
+
+
+```{r}
+#Checking how many projects failed to reduce or remove even 1 metric ton of CO2
+zero_count <- project_df |>
+  filter(credits_issued == 0) |>
+  nrow()
+
+zero_count
+```
+## First Wrangle
+
+The first wrangle is to include the project name, the scope of the project(a multinomial variable), and the credits issued,this is a numerical value that indicates the amount of carbon credits created. A carbon credit represents a 1 metric ton reduction or removal of CO2 from the atmosphere that can be sold to companies to offset their emission.
+
+```{r}
+#Creating dataframe for comparing renewable energy vs supply chains vs forestry
+
+general_df <- project_df |>
+  select(-type)|>
+  mutate(
+    scope = case_match(scope,
+                       "Renewable Energy" ~ "Renewables",
+                       "Forestry & Land Use" ~ "Reforestation",
+                       .default = "Supply Chain"
+                                              ),
+    credits_issued = ifelse(credits_issued == 0, NA, credits_issued))
+
+glimpse(general_df)
+```
+
+
+```{r}
+general_df |>
+  count(scope)
+```
+There are 1827 observations on Reforestation projects, 2367 on Renewables, and 5352 for all the various supply chains.
+
+
+```{r}
+#| echo: false
+#| eval: false
+wrangle1_path <- file.path("data","general_comparison.csv")
+write.csv(general_df,wrangle1_path, row.names = FALSE)
+```
+
+## Second Wrangle
+The second regression we are preforming is comparing the different types of renewable energy with each other, this includes: Biomass, Geothermal, Hydropower, Bundled Renewables, Wind, and Solar. This dataset will include project name, the type (filtered for only renewable energy types), and carbon credits issued.
+
+```{r}
+renewables_df <- project_df |>
+  filter(scope == "Renewable Energy") |>
+  select(-scope)|>
+  mutate(
+    type = case_match(type,
+                      "Biomass" ~ "Biomass",
+                      "Geothermal" ~ "Geothermal",
+                      "Hydropower" ~ "Hydropower",
+                      "RE Bundled (Bundled Renewables)" ~ "Bundled Renewables",
+                      "Wind" ~ "Wind",
+                      .default = "Solar"),
+    credits_issued = ifelse(credits_issued == 0, NA, credits_issued))
+
+glimpse(renewables_df)
+```
+
+
+```{r}
+#| echo: false
+#| eval: false
+wrangle2_path <- file.path("data","renewable_comparison.csv")
+write.csv(renewables_df,wrangle2_path,row.names=FALSE)
+```
+
+## Third Wrangle
+This dataset is similar to the second however we are comparing the different supply chains, this includes: Agriculture, Carbon Capture, Chemical Processes, Community, Industrial/Commercial, Transportation, Waste Management.
+
+```{r}
+supplychain_df <- project_df |>
+  filter(!(scope %in% c("Renewable Energy", "Forestry & Land Use"))) |>
+  select(-type) |>
+  mutate(
+    scope = case_match(scope,
+                       "Agriculture" ~ "Agriculture",
+                       "Carbon Capture & Storage" ~ "Carbon Capture",
+                       "Chemical Processes" ~ "Chemical Processes",
+                       "Household & Community" ~ "Community",
+                       "Industrial & Commercial" ~ "Industrial/Commercial",
+                       "Transportation" ~ "Transportation",
+                       "Waste Management" ~ "Waste Management"),
+    credits_issued = ifelse(credits_issued == 0, NA, credits_issued))
+
+glimpse(supplychain_df)
+              
+```
+
+```{r}
+#| echo: false
+#| eval: false
+wrangle3_path <- file.path("data","supply_chain_comparison.csv")
+write.csv(supplychain_df,wrangle3_path,row.names=FALSE)
+```
+
+

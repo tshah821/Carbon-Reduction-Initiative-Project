@@ -1,0 +1,4 @@
+"0","supply_chain_df <- read.csv(""data/supply_chain_comparison.csv"")"
+"0","supply_chain_df$scope <- factor(supply_chain_df$scope, ordered = FALSE)"
+"0","supply_chain_df$scope <- relevel(supply_chain_df$scope, ref = ""Chemical Processes"")"
+"0","supply_chain_model <- lm(credits_issued ~ scope, data = supply_chain_df)"

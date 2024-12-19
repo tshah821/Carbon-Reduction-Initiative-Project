@@ -1,0 +1,4 @@
+"0","renewables_df <- read.csv(""data/renewable_comparison.csv"")"
+"0","renewables_df$type <- factor(renewables_df$type, ordered = FALSE)"
+"0","renewables_df$type <- relevel(renewables_df$type, ref = ""Solar"")"
+"0","renewables_model <- lm(credits_issued ~ type, data = renewables_df)"

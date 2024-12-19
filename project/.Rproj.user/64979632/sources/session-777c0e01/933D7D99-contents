@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Tirth Shah, William Kang, Davis Blanch, and Ria Saxena">
+<meta name="dcterms.date" content="2024-12-16">
+
+<title>Policy Memo</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="Project_Assignment_3_Report_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Project_Assignment_3_Report_files/libs/quarto-html/quarto.js"></script>
+<script src="Project_Assignment_3_Report_files/libs/quarto-html/popper.min.js"></script>
+<script src="Project_Assignment_3_Report_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Project_Assignment_3_Report_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Project_Assignment_3_Report_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Project_Assignment_3_Report_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Project_Assignment_3_Report_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Project_Assignment_3_Report_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Project_Assignment_3_Report_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Policy Memo</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Tirth Shah, William Kang, Davis Blanch, and Ria Saxena </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">December 16, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>The goal of this project was to help a company choose which Corporate Social Responsibility (CSR) initiative they should be focus on to reduce carbon emissions. Doing so we examined three different types of green investment avenues and analyze the most effective strategy for increasing return on investment. The three possible avenues were investing in renewable energy, improving supply chain efficiency, or partnering with NGOs for reforestation projects.</p>
+<p>The history and background of CSR can be traced back to the 1950s, with economist Howard Bowen first bringing attention to the subject through his written work “Social Responsibilities of the Businessman”.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Since then, CSR has expanded vastly, particularly at the start of the 2000s, with the term Environmental, Social, and Governmental (ESG) having been coined in 2005. The aftermath of events such as the Deepwater Horizon Oil Spill and 2008 Financial Crisis brought a greater public awareness to the importance of CSR, and now multi-million dollar companies like Wells Fargo, Coca-Cola, Walt Disney, and Pfizer have incorporated it into their business strategies. CSR benefits corporations in two major ways; first, they have been shown to improve financial performance. A meta-analysis from Clausius Scientific Press found that CSR has a positive effect on financial performance, with a Babson College research study finding that companies investing in a social purpose have a 6% higher market value and generate 20% more revenue than those that don’t.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Additionally, CSR benefits companies by increasing customer loyalty and engagement, with studies conducted by Cone Communications finding customers are more likely to both buy a product and pay more for it if a company advocated for an ESG issue.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> As such, this project is relevant because given the vast landscape of green projects available, it helps narrow down the projects that a company can invest the least capital into for the greatest gain. Ultimately firms have limited capital to spend on CSR initiatives as that is capital not given directly to shareholders, so it is important to assess how they can most effectively deploy their resources for the greatest return.</p>
+</section>
+<section id="data-and-methodology" class="level1">
+<h1>Data and Methodology</h1>
+<p>To determine whether investing into renewable energy, improving supply chain efficiency, or partnering with NGOs to improve reforestation provides the best return on investment; we must find a way to measure both the environmental and financial of each sector. To do this, our team decided to look into the Berkeley Carbon Trading Project, which is a database that contains all carbon offset projects.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> From this database, we extracted the necessary information such as project name, project scope, project type, and carbon credits issued.</p>
+<p>The main things to focus on are project scope, project type, and carbon credits issued. The project scope has 9 different categories (1 renewable, 1 forestry, and 7 supply chain) that refer to the focus of the project. The project type is simply a more specific focus within the broader groups of the project scope. Finally, the carbon credits issued refer to the number of carbon credits given to the project. The reason we use carbon credits as a means to determine the success of projects is because they act as both an environmental and financial indicator. A single carbon credit is issued when a metric ton of CO2 is reduced or removed from the atmosphere.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> Furthermore, these credits can be bought or sold to offset carbon emissions. Therefore, investing into an initiative that yields more carbon credits can be sold for more profit or offset more production/emissions.</p>
+</section>
+<section id="analysis-and-results" class="level1">
+<h1>Analysis and Results</h1>
+<section id="primary-comparisons" class="level2">
+<h2 class="anchored" data-anchor-id="primary-comparisons">Primary Comparisons</h2>
+<p>Figure 1 below shows the distribution of carbon credits issued per project scope (whether it focuses on renewables, reforestation, or supply chain). Figure 2 shows the 95% confidence intervals for the estimated carbon credits issued per project scope. Simply put, each interval represents a range of values the true number of carbon credits issued could be.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Project_Assignment_3_Report_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Project_Assignment_3_Report_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>From this data, we can gather that:</p>
+<ul>
+<li>renewable energy development nets ~ 460,000 carbon credits</li>
+<li>reforestation initiatives nets ~ 1.1 million carbon credits</li>
+<li>optimizing supply chain efficiency nets ~ 235,000 carbon credits</li>
+</ul>
+</section>
+<section id="renewable-energy-comparisons" class="level2">
+<h2 class="anchored" data-anchor-id="renewable-energy-comparisons">Renewable Energy Comparisons</h2>
+<p>Now Looking into our secondary projects, we want to compare what kind of renewable energy the company should invest into to optimize carbon credit generation.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Project_Assignment_3_Report_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Project_Assignment_3_Report_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Using Figure 4, the model predicts that:</p>
+<ul>
+<li>solar projects nets ~ 485,000 credits</li>
+<li>biomass nets ~ 200,000 credits</li>
+<li>geothermal nets ~ 660,000 credits</li>
+<li>hydropower nets ~ 680,000 credits</li>
+<li>wind nets ~ 410,000 credits</li>
+</ul>
+<p>One important note is that there is significant overlap between confidence intervals. Simply put, it means that aside from biomass projects there is a high likelihood of obtaining the given estimates for solar, geothermal, hydropower, and wind assuming there is no difference among those renewable energy sources in carbon credit generation. From the regression output, the only statistically significant estimates are for solar(the reference variable) and biomass.</p>
+<p>Furthermore, looking at Figure 3, we can see that there are very few geothermal projects compared to the rest. This explains the increased range for the confidence interval, as there is not a lot of data to give us solid evidence for the true number of carbon credits issued for geothermal projects.</p>
+</section>
+<section id="supply-chain-comparisons" class="level2">
+<h2 class="anchored" data-anchor-id="supply-chain-comparisons">Supply Chain Comparisons</h2>
+<p>Here is the list of supply chains and a brief description:</p>
+<ul>
+<li><strong>Chemical Processes:</strong> reducing gasses from chemical/fuel manufacturing</li>
+<li><strong>Agriculture:</strong> reducing emissions from crops, pastureland, and dairies</li>
+<li><strong>Carbon Capture:</strong> capturing and permanent storage of CO2 from manufactured products</li>
+<li><strong>Community:</strong> improving infrastructure via energy efficient technologies in residential and non-industrial buildings</li>
+<li><strong>Industrial/Commercial:</strong> optimizing manufacturing processing</li>
+<li><strong>Transportation:</strong> transportation related initiatives such as mass transit implementation, route/vehicle upgrades, fleet efficiency improvements</li>
+<li><strong>Waste Management:</strong> reducing/removing emissions from waste management processes</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Project_Assignment_3_Report_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Project_Assignment_3_Report_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="discussion" class="level1">
+<h1>Discussion</h1>
+<p><strong>Prioritize Reforestation Efforts:</strong></p>
+<ul>
+<li>Allocate a significant portion of the CSR budget to reforestation projects because they yield the highest return in carbon credits.</li>
+<li>Consider partnerships with established organizations in reforestation to ensure credible, scalable, and certified carbon offset programs.</li>
+</ul>
+<p><strong>Combine with High Impact Secondary Projects:</strong></p>
+<ul>
+<li>Use a portion of the budget to invest in renewable energy projects to diversify efforts while supporting innovation and energy transition goals.</li>
+<li>Limit investments in supply chain optimization to initiatives with strong co-benefits, such as cost savings or improved efficiency.</li>
+</ul>
+<p><strong>Equal Funding Among Solar, Hydropower, and Wind Renewable Energies:</strong></p>
+<ul>
+<li>Aside from biomass sourced renewable energy, all renewable energy endeavors generate similar amounts of carbon credits</li>
+<li>There is not enough evidence to make a sound conclusion on the impacts of geothermal energy as there are not enough data points (looking at Figure 3)</li>
+</ul>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Mauricio Andrés Latapí Agudelo, Lára Jóhannsdóttir, and Brynhildur Davídsdóttir, “A Literature Review of the History and Evolution of Corporate Social Responsibility,” International Journal of Corporate Social Responsibility 4, no. 1 (January 22, 2019): 1–23, https://doi.org/10.1186/s40991-018-0039-y.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Steve Rochlin et al., “Project ROI: Defining the Competitive and Financial Advantages of Corporate Responsibility and Sustainability,” Babson College Institute for Social Innovation, 2015, https://www.babson.edu/media/babson/site-assets/content-assets/academics/centers-and-institutes/the-lewis-institute/project-roi/Project-ROI-Report.pdf.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Cone Communications, “2017 Cone Communications CSR Study,” 2017, https://www.cbd.int/doc/case-studies/inc/cs-inc-cone-communications-en.pdf.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Center for Environmental Public Policy (CEPP), “Berkeley Carbon Trading Project,” gspp.berkeley.edu (University of California, Berkeley, 2024), https://gspp.berkeley.edu/research-and-impact/centers/cepp/projects/berkeley-carbon-trading-project.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>“Carbon Credits Explained.” Climate Impact Partners. Accessed December 15, 2024. https://www.climateimpact.com/services-projects/carbon-credits-explained-what-they-are-and-how-they-work/#:~:text=Carbon%20credits%20are%20generated%20by,2e)%20in%20the%20atmosphere.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

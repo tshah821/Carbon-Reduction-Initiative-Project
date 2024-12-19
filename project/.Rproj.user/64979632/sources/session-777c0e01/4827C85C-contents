@@ -1,0 +1,10 @@
+- source: Project_Assignment_3_Slides.qmd
+  quarto-pub:
+    - id: beba494b-d88e-4b8a-946c-b44c1463c383
+      url: 'https://tshah821.quarto.pub/carbon-reduction-initiative-project'
+    - id: 0c10f211-a603-46f6-8fc0-44c384e59ff7
+      url: 'https://tshah821.quarto.pub/carbon-reduction-initiative-project'
+- source: Project_Assignment_3_Report.qmd
+  quarto-pub:
+    - id: c2f34b61-0f9e-4b26-8d91-166bdce74d48
+      url: 'https://tshah821.quarto.pub/carbon-reduction-policy-initiative'

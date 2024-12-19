@@ -1,0 +1,138 @@
+---
+title: "Regression Modeling"
+author: "Tirth Shah, William Kang, Davis Blanch, Ria Saxena"
+format: html
+editor: visual
+---
+
+# Creating Linear Regression Models for our Data
+
+$$
+\text{Note: } \alpha = .05 \text{ for all statistical inferences } 
+$$
+
+## Comparing Renewable Energy vs Reforestation Projects vs Supply Chain Efficiency on Carbon Credit Generation
+
+```{r}
+#| warning: false
+#loading libraries
+library(ggplot2)
+library(readr)
+library(dplyr)
+library(scales)
+```
+
+```{r}
+#| echo: false
+general_df <- read.csv("data/general_comparison.csv")
+```
+
+First we unorder the categorical variable, meaning that Renewables, Reforestation, and Supply Chain are all equivalent levels. Then we set Renewables as the reference or default.
+
+```{r}
+
+general_df$scope <- factor(general_df$scope, ordered = FALSE)
+general_df$scope <- relevel(general_df$scope, ref = "Renewables")
+
+general_model <- lm(credits_issued ~ scope, data = general_df)
+summary(general_model)
+```
+
+This model predicts that for any given renewable project it would generate 460,851 carbon credits, reforestation projects would generate 682,502 **more** carbon credits and focusing on supply chains would generate 224,473 **less** credits. Furthermore, if we look at the p-value all of them are significant to \*\*\*, this means that the likelihood of obtaining these coefficients assuming that there is no relationship is extremely small.
+
+```{r}
+#| echo: false
+#| warning: false
+
+general_comparison_plot <- ggplot(general_df, aes(x = scope, y = credits_issued)) +
+  geom_jitter(aes(color = credits_issued), width = 0.15, height = 0) +  
+  labs(
+    x = "Project Scope",
+    y = "Carbon Credits Issued (log scale)",
+    title = "Carbon Credits Issued per Project Type",
+    caption = "Source: Berkeley Carbon Trading Project"
+  ) +
+  scale_y_log10(labels = comma) +
+  scale_color_viridis_c(option = "turbo", begin = .1) +  
+  scale_x_discrete(expand = expansion(add = 0.9)) +
+  theme_classic(base_size = 12)+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),legend.position = "none")
+general_comparison_plot
+```
+
+## Comparing Different Types of Renewable Energy Projects on Carbon Credit Generation
+
+```{r}
+#| echo: false
+renewables_df <- read.csv("data/renewable_comparison.csv")
+```
+
+```{r}
+renewables_df$type <- factor(renewables_df$type, ordered = FALSE)
+renewables_df$type <- relevel(renewables_df$type, ref = "Solar")
+
+renewables_model <- lm(credits_issued ~ type, data = renewables_df)
+summary(renewables_model)
+```
+
+The model here estimates that for a solar power based renewable project would generate 486,358 carbon credits. It also estimates that a biomass focused project would generate 284,754 **less** carbon credits. Both of these coefficients are significant, below our alpha threshold of .05. However the coefficients for geothermal, hydropower, and wind are all statistically insignificant and we conclude that the coefficients for these variables is 0. This means that there is roughly equal carbon credit generation among solar, geothermal, hydropower, and wind projects; but geothermal will net roughly 285,000 less carbon credits.
+
+```{r}
+#| echo: false
+#| warning: false
+
+renewable_plot <- ggplot(renewables_df, aes(x = type, y = credits_issued))+
+  geom_jitter(aes(color = credits_issued), width = .15, height = 0)+
+  labs(
+    x = "Renewable Energy Type",
+    y = "Carbon Credits Issued (log scale)",
+    title = "Carbon Credits Issued per Renewable Energy Source",
+    caption = "Source: Berkeley Carbon Trading Project"
+  ) +
+  scale_y_log10(labels = comma) +
+  scale_color_viridis_c(option = "turbo", begin = .1) +  
+  scale_x_discrete(expand = expansion(add = 0.9)) +
+  theme_classic(base_size = 12)+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),legend.position = "none")
+  
+  
+renewable_plot
+```
+
+## Comparing Different Supply Chain Projects on Carbon Credit Generation
+
+```{r}
+#| echo: false
+supply_chain_df <- read.csv("data/supply_chain_comparison.csv")
+```
+
+```{r}
+supply_chain_df$scope <- factor(supply_chain_df$scope, ordered = FALSE)
+supply_chain_df$scope <- relevel(supply_chain_df$scope, ref = "Chemical Processes")
+
+supply_chain_model <- lm(credits_issued ~ scope, data = supply_chain_df)
+summary(supply_chain_model)
+```
+
+The model estimates that for a project involved in improving chemical processes would generate 309,612 carbon credits. Agriculture based projects would generate 201,488 **less** credits than chemical processes, carbon capture projects generate 3,331,784 **more** credits, community based projects generate 158,676 **less** credits, industrial/commercial projects generate 233,294 **more** credits, and transportation projects generate 280,469 **less** credits. All of these coefficients are statistically significant except for waste management and thus we assume there is no relationship between waste management projects and the baseline of chemical processes.
+
+```{r}
+#| echo: false
+#| warning: false
+supplychain_plot <- ggplot(supply_chain_df, aes(x = scope, y = credits_issued))+
+  geom_jitter(aes(color = credits_issued), with = .03, height = 0)+
+  labs(
+    x = "Supply Chains",
+    y = "Carbon Credits Issued (log scale)",
+    title = "Carbon Credits Issued per Supply Chain",
+    caption = "Source: Berkeley Carbon Trading Project")+
+  scale_y_log10(labels = comma)+
+  scale_color_viridis_c(option = "turbo", begin = .1)+  
+  scale_x_discrete(expand = expansion(add = 0.9)) +
+  theme_classic(base_size = 12)+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),legend.position = "none")
+
+supplychain_plot
+```
+
+One thing to note, because there are not a lot of projects based on improving carbon capturing, the coefficient is not as statistically powerful, or in other words the model estimation is not necessarily generalizable due to having a low sample size for carbon capturing projects.
